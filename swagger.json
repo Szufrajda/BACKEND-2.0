@@ -1,0 +1,234 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Products API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001",
+      "description": "Local development server"
+    }
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "summary": "Get all products",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "integer",
+              "description": "Filter products by ID"
+            }
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string",
+              "description": "Filter products by name"
+            }
+          },
+          {
+            "in": "query",
+            "name": "minPrice",
+            "schema": {
+              "type": "number",
+              "description": "Filter products with minimum price"
+            }
+          },
+          {
+            "in": "query",
+            "name": "maxPrice",
+            "schema": {
+              "type": "number",
+              "description": "Filter products with maximum price"
+            }
+          },
+          {
+            "in": "query",
+            "name": "minQuantity",
+            "schema": {
+              "type": "integer",
+              "description": "Filter products with minimum quantity"
+            }
+          },
+          {
+            "in": "query",
+            "name": "maxQuantity",
+            "schema": {
+              "type": "integer",
+              "description": "Filter products with maximum quantity"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string",
+              "enum": ["id", "name", "price", "quantity"],
+              "description": "Sort products by id, name, price, or quantity"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"],
+              "description": "Sort order: ascending (asc) or descending (desc)"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success - returns a list of products"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new product",
+        "requestBody": {
+          "description": "Data of the new product",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "integer", "description": "Product ID" },
+                  "name": { "type": "string", "description": "Product name" },
+                  "price": { "type": "number", "description": "Product price" },
+                  "description": { "type": "string", "description": "Product description" },
+                  "quantity": { "type": "integer", "description": "Product quantity" },
+                  "unit": { "type": "string", "description": "Product unit" }
+                },
+                "required": ["id", "name", "price", "description", "quantity", "unit"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success - product added successfully"
+          },
+          "400": {
+            "description": "Error - product with the given name or ID already exists"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "summary": "Get details of a product",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Product ID"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success - returns details of the product"
+          },
+          "404": {
+            "description": "Error - product with the given ID not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing product",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated data of the product",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "price": { "type": "number" },
+                  "description": { "type": "string" },
+                  "quantity": { "type": "integer" },
+                  "unit": { "type": "string" }
+                },
+                "required": ["name", "price", "quantity"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success - product updated successfully"
+          },
+          "404": {
+            "description": "Error - product with the given ID not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an existing product",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success - product deleted successfully"
+          },
+          "404": {
+            "description": "Error - product with the given ID not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/inventory-report": {
+      "get": {
+        "summary": "Generate inventory report",
+        "responses": {
+          "200": {
+            "description": "Success - returns inventory report"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    }
+  }
+}
